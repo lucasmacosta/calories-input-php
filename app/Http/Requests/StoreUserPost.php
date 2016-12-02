@@ -26,14 +26,20 @@ class StoreUserPost extends FormRequest
     {
         // Email is unique among table users
         $email_rule = 'required|email|max:255|unique:users';
+
         if ($this->method() === 'PUT') {
             // When updating, omit email from current user during unique check
             $email_rule .= ',email,' . $this->route('user')->id;
+            // Password it's not required when updating user
+            $password_rule = 'min:6|confirmed';
+        } else {
+            $password_rule = 'required|min:6|confirmed';
         }
+
         return [
             'name' => 'required|max:255',
             'email' => $email_rule,
-            'password' => 'required|min:6|confirmed',
+            'password' => $password_rule,
             'role' => 'in:user,usersManager,admin',
             'calories_per_day' => 'integer|min:0',
         ];

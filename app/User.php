@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'role'
     ];
 
     /**
@@ -26,4 +26,41 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * The list of valid roles for users
+     *
+     * @var array
+     */
+    private static $available_roles = [
+        'user' => 'User',
+        'usersManager' => 'Users Manager',
+        'admin' => 'Admin',
+    ];
+
+    /**
+     * Returns the list of valid roles for users
+     *
+     * @return array
+     */
+    public static function getRolesList() {
+        return self::$available_roles;
+    }
+
+    /**
+     * Returns the readable name of the role
+     *
+     * @return string
+     */
+    public function roleName() {
+        return self::$available_roles[$this->role];
+    }
+
+    /**
+     * Get the settings record associated with the user.
+     */
+    public function settings()
+    {
+        return $this->hasOne('App\Settings');
+    }
 }
