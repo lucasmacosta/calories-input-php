@@ -37,19 +37,21 @@
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('role') ? ' has-error' : '' }}">
-                            {{ Form::label('role', 'Role', [ 'class' => 'col-md-4 control-label' ]) }}
+                        @if (Auth::user()->isAdmin())
+                            <div class="form-group{{ $errors->has('role') ? ' has-error' : '' }}">
+                                {{ Form::label('role', 'Role', [ 'class' => 'col-md-4 control-label' ]) }}
 
-                            <div class="col-md-6">
-                                {{ Form::select('role', \App\User::getRolesList(), 'user', [ 'class' => 'form-control', 'required' => true ]) }}
+                                <div class="col-md-6">
+                                    {{ Form::select('role', \App\User::getRolesList(), 'user', [ 'class' => 'form-control', 'required' => true ]) }}
 
-                                @if ($errors->has('role'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('role') }}</strong>
-                                    </span>
-                                @endif
+                                    @if ($errors->has('role'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('role') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
                             </div>
-                        </div>
+                        @endif
 
                         <div class="form-group{{ $errors->has('calories_per_day') ? ' has-error' : '' }}">
                             {{ Form::label('settings[calories_per_day]', 'Calories Per Day', [ 'class' => 'col-md-4 control-label' ]) }}

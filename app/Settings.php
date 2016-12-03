@@ -16,7 +16,7 @@ class Settings extends Model
     ];
 
     /**
-     * Get the user that owns the phone.
+     * Get the user that owns the settings
      */
     public function user()
     {

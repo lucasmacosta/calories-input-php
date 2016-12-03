@@ -43,7 +43,14 @@
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        @if (Auth::check())
+                            @can('create', App\User::class)
+                            <li><a href="{{ route('users.index') }}">Users</a></li>
+                            @endcan
+                            @if (Auth::user()->isUser())
+                            <li><a href="{{ route('users.meals.index', [ 'user' => Auth::user() ]) }}">My Meals</a></li>
+                            @endif
+                        @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -59,6 +66,7 @@
                                 </a>
 
                                 <ul class="dropdown-menu" role="menu">
+                                    <li><a href="{{ route('users.edit', [ 'user' => Auth::user() ]) }}">Edit Profile</a></li>
                                     <li>
                                         <a href="{{ url('/logout') }}"
                                             onclick="event.preventDefault();

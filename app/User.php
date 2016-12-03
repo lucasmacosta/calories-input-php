@@ -63,4 +63,27 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Settings');
     }
+
+    /**
+     * Get the meal records associated with the user.
+     */
+    public function meals()
+    {
+        return $this->hasMany('App\Meal');
+    }
+
+    public function isUser()
+    {
+        return $this->role === 'user';
+    }
+
+    public function isUsersManager()
+    {
+        return $this->role === 'usersManager';
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
 }

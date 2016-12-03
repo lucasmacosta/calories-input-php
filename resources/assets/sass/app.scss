@@ -6,4 +6,14 @@
 @import "variables";
 
 // Bootstrap
+// @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap-compass";
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+// Users
+@import "users";
+
+// Meals
+@import "meals";
+
+// Bootstrap datetime picker
+@import "node_modules/eonasdan-bootstrap-datetimepicker/src/sass/bootstrap-datetimepicker-build";

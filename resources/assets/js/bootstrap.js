@@ -11,6 +11,12 @@ window.$ = window.jQuery = require('jquery');
 require('bootstrap-sass');
 
 /**
+ * Load the bootstrap datetime picker and its dependency moment
+ */
+window.moment = require('moment');
+$.fn.datetimepicker = require('eonasdan-bootstrap-datetimepicker');
+
+/**
  * Vue is a modern JavaScript library for building interactive web interfaces
  * using reactive data binding and reusable components. Vue's API is clean
  * and simple, leaving you to focus on building your next great project.

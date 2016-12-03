@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Http\Requests\StoreUserPost;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -17,6 +17,9 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('can:create,App\User', [ 'only' => [ 'index', 'create', 'store' ] ]);
+        $this->middleware('can:update,user', [ 'only' => [ 'edit', 'update' ] ]);
+        $this->middleware('can:delete,user', [ 'only' => [ 'destroy' ] ]);
     }
 
     /**
@@ -26,12 +29,16 @@ class UserController extends Controller
      */
     public function index()
     {
-        // TODO: Return only users manageable by the current user
         // TODO: Include pagination
-        $users = User::all();
+
+        $query = User::query();
+
+        if (! Auth::user()->isAdmin()) {
+            $query->where('role', '=', 'user');
+        }
 
         return view('users.index')
-            ->with('users', $users);
+            ->with('users', $query->orderBy('name', 'asc')->get());
     }
 
     /**
@@ -52,8 +59,13 @@ class UserController extends Controller
      */
     public function store(StoreUserPost $request)
     {
-        $input = $request->only(['name', 'email', 'role']);
+        $input = $request->only(['name', 'email']);
+
         $input['password'] = bcrypt($request->input('password'));
+
+        if (Auth::user()->isAdmin()) {
+            $input['role'] = $request->input('role');
+        }
 
         $user = User::create($input);
 
@@ -62,16 +74,6 @@ class UserController extends Controller
         }
 
         return redirect()->route('users.index');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
-    {
     }
 
     /**
@@ -95,9 +97,14 @@ class UserController extends Controller
      */
     public function update(StoreUserPost $request, User $user)
     {
-        $input = $request->only(['name', 'email', 'role']);
+        $input = $request->only(['name', 'email']);
+
         if ($request->has('password')) {
             $input['password'] = bcrypt($request->input('password'));
+        }
+
+        if (Auth::user()->isAdmin()) {
+            $input['role'] = $request->input('role');
         }
 
         $user->update($input);
@@ -110,7 +117,11 @@ class UserController extends Controller
             }
         }
 
-        return redirect()->route('users.index');
+        if (Auth::user()->isAdmin()) {
+            return redirect()->route('users.index');
+        } else {
+            return redirect('/home');
+        }
     }
 
     /**

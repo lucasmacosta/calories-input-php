@@ -19,4 +19,5 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index');
 
-Route::resource('users', 'UserController');
+Route::resource('users', 'UserController', [ 'except' => [ 'show' ] ]);
+Route::resource('users.meals', 'MealController', [ 'except' => [ 'show' ] ]);

@@ -14,6 +14,7 @@ require('./bootstrap');
  */
 
 Vue.component('example', require('./components/Example.vue'));
+Vue.component('date-time-picker', require('./components/DateTimePicker.vue'));
 
 const app = new Vue({
     el: '#app'
